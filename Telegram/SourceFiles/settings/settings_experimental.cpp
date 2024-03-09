@@ -17,7 +17,6 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "ui/chat/chat_style_radius.h"
 #include "base/options.h"
 #include "core/application.h"
-#include "core/sandbox.h"
 #include "core/launcher.h"
 #include "chat_helpers/tabbed_panel.h"
 #include "dialogs/dialogs_widget.h"
@@ -26,6 +25,7 @@ https://github.com/telegramdesktop/tdesktop/blob/master/LEGAL
 #include "mainwindow.h"
 #include "media/player/media_player_instance.h"
 #include "webview/webview_embed.h"
+#include "window/main_window.h"
 #include "window/window_peer_menu.h"
 #include "window/window_session_controller.h"
 #include "window/window_controller.h"
@@ -143,7 +143,6 @@ void SetupExperimental(
 	addToggle(ChatHelpers::kOptionTabbedPanelShowOnClick);
 	addToggle(Dialogs::kOptionForumHideChatsList);
 	addToggle(Core::kOptionFractionalScalingEnabled);
-	addToggle(Core::kOptionForceWaylandFractionalScaling);
 	addToggle(Window::kOptionViewProfileInChatsListContextMenu);
 	addToggle(Info::Profile::kOptionShowPeerIdBelowAbout);
 	addToggle(Ui::GL::kOptionAllowLinuxNvidiaOpenGL);
@@ -155,6 +154,7 @@ void SetupExperimental(
 	addToggle(Window::Notifications::kOptionGNotification);
 	addToggle(Core::kOptionFreeType);
 	addToggle(Data::kOptionExternalVideoPlayer);
+	addToggle(Window::kOptionNewWindowsSizeAsFirst);
 }
 
 } // namespace
