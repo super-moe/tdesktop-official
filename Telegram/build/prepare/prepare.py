@@ -424,7 +424,7 @@ if customRunCommand:
 stage('patches', """
     git clone https://github.com/desktop-app/patches.git
     cd patches
-    git checkout bed08b53a3
+    git checkout cc0c2f8365
 """)
 
 stage('msys64', """
@@ -696,7 +696,7 @@ mac:
 """)
 
 stage('dav1d', """
-    git clone -b 1.2.1 --depth 1 https://code.videolan.org/videolan/dav1d.git
+    git clone -b 1.4.1 --depth 1 https://code.videolan.org/videolan/dav1d.git
     cd dav1d
 win:
     if "%X8664%" equ "x64" (
@@ -774,7 +774,7 @@ mac:
 """)
 
 stage('libavif', """
-    git clone -b v0.11.1 --depth 1 https://github.com/AOMediaCodec/libavif.git
+    git clone -b v1.0.4 --depth 1 https://github.com/AOMediaCodec/libavif.git
     cd libavif
 win:
     cmake . ^
@@ -804,7 +804,7 @@ mac:
 """)
 
 stage('libde265', """
-    git clone --depth 1 -b v1.0.12 https://github.com/strukturag/libde265.git
+    git clone --depth 1 -b v1.0.15 https://github.com/strukturag/libde265.git
     cd libde265
 win:
     cmake . ^
@@ -880,7 +880,7 @@ mac:
 """)
 
 stage('libheif', """
-    git clone --depth 1 -b v1.16.2 https://github.com/strukturag/libheif.git
+    git clone --depth 1 -b v1.17.6 https://github.com/strukturag/libheif.git
     cd libheif
 win:
     %THIRDPARTY_DIR%\\msys64\\usr\\bin\\sed.exe -i 's/LIBHEIF_EXPORTS/LIBDE265_STATIC_BUILD/g' libheif/CMakeLists.txt
@@ -1400,21 +1400,21 @@ release:
 """)
 
 if buildQt5:
-    stage('qt_5_15_12', """
-    git clone -b v5.15.12-lts-lgpl https://github.com/qt/qt5.git qt_5_15_12
-    cd qt_5_15_12
+    stage('qt_5_15_13', """
+    git clone -b v5.15.13-lts-lgpl https://github.com/qt/qt5.git qt_5_15_13
+    cd qt_5_15_13
     perl init-repository --module-subset=qtbase,qtimageformats,qtsvg
-depends:patches/qtbase_5.15.12/*.patch
+depends:patches/qtbase_5.15.13/*.patch
     cd qtbase
 win:
-    for /r %%i in (..\\..\\patches\\qtbase_5.15.12\\*) do git apply %%i -v
+    for /r %%i in (..\\..\\patches\\qtbase_5.15.13\\*) do git apply %%i -v
     cd ..
 
     SET CONFIGURATIONS=-debug
 release:
     SET CONFIGURATIONS=-debug-and-release
 win:
-    """ + removeDir("\"%LIBS_DIR%\\Qt-5.15.12\"") + """
+    """ + removeDir("\"%LIBS_DIR%\\Qt-5.15.13\"") + """
     SET ANGLE_DIR=%LIBS_DIR%\\tg_angle
     SET ANGLE_LIBS_DIR=%ANGLE_DIR%\\out
     SET MOZJPEG_DIR=%LIBS_DIR%\\mozjpeg
@@ -1422,7 +1422,7 @@ win:
     SET OPENSSL_LIBS_DIR=%OPENSSL_DIR%\\out
     SET ZLIB_LIBS_DIR=%LIBS_DIR%\\zlib
     SET WEBP_DIR=%LIBS_DIR%\\libwebp
-    configure -prefix "%LIBS_DIR%\\Qt-5.15.12" ^
+    configure -prefix "%LIBS_DIR%\\Qt-5.15.13" ^
         %CONFIGURATIONS% ^
         -force-debug-info ^
         -opensource ^
@@ -1454,17 +1454,17 @@ win:
         -nomake tests ^
         -platform win32-msvc
 
-    jom -j16
-    jom -j16 install
+    jom -j%NUMBER_OF_PROCESSORS%
+    jom -j%NUMBER_OF_PROCESSORS% install
 mac:
-    find ../../patches/qtbase_5.15.12 -type f -print0 | sort -z | xargs -0 git apply
+    find ../../patches/qtbase_5.15.13 -type f -print0 | sort -z | xargs -0 git apply
     cd ..
 
     CONFIGURATIONS=-debug
 release:
     CONFIGURATIONS=-debug-and-release
 mac:
-    ./configure -prefix "$USED_PREFIX/Qt-5.15.12" \
+    ./configure -prefix "$USED_PREFIX/Qt-5.15.13" \
         $CONFIGURATIONS \
         -force-debug-info \
         -opensource \
@@ -1512,6 +1512,7 @@ mac:
         -system-webp \
         -I "$USED_PREFIX/include" \
         -no-feature-futimens \
+        -no-feature-brotli \
         -nomake examples \
         -nomake tests \
         -platform macx-clang -- \
